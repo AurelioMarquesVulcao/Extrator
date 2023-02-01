@@ -1,0 +1,11 @@
+packages/fief/cypress/screenshots/
+packages/datas/src/assets/data/*.json
+packages/fief/cypress/videos/
+packages/fief/allure-results/
+packages/fief/allure-report/
+packages/datas/tsconfig.tsbuildinfo
+node_modules/
+.history/
+dist/
+.env
+cypress.env.json
