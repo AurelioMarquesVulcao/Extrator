@@ -1,0 +1,43 @@
+variables:
+    GIT_USER_NAME: "Auto Version"
+    GIT_USER_EMAIL: "git@meta.com.br"
+    PRODUCTION_BRANCH: "master"
+    STAGING_BRANCH: "staging"
+    DEVELOP_BRANCH: "develop"
+
+stages:
+  - versionize
+
+image: node:lts
+
+lerna_versionize:
+  stage: versionize
+  only:
+    - master
+    - main
+    - staging
+    - homolog
+    - develop
+    - development
+  before_script:
+    - apt-get update -y && apt-get install jq -y
+    - git config --global user.name "$GIT_USER_NAME"
+    - git config --global user.email "$GIT_USER_EMAIL"
+    - chmod +x ./common/*
+    - chmod +x ./scripts/*
+    - chmod +x ./after_scripts/*
+    - VERSIONIZE_PATH=$(realpath .)
+  script:
+    - $VERSIONIZE_PATH/scripts/git-clone-project.sh
+    - cd project
+    - $VERSIONIZE_PATH/scripts/check-changelog.sh
+    - npx lerna exec $VERSIONIZE_PATH/scripts/check-changelog.sh
+    - VERSIONIZE_PATH=$VERSIONIZE_PATH $VERSIONIZE_PATH/scripts/check-version.sh
+    - $VERSIONIZE_PATH/scripts/bump-version.sh
+    - VERSIONIZE_PATH=$VERSIONIZE_PATH $VERSIONIZE_PATH/scripts/create-version.sh
+    - $VERSIONIZE_PATH/scripts/create-changelog.sh
+    - npx lerna exec $VERSIONIZE_PATH/scripts/create-changelog.sh
+    - VERSIONIZE_PATH=$VERSIONIZE_PATH $VERSIONIZE_PATH/scripts/git-commit.sh
+  after_script:
+    - VERSIONIZE_PATH=$(realpath .)
+    - VERSIONIZE_PATH=$VERSIONIZE_PATH $VERSIONIZE_PATH/after_scripts/git-merge-branches.sh

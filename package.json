@@ -1,0 +1,25 @@
+{
+  "name": "lerna-versionize",
+  "private": true,
+  "workspaces": [
+    "configs/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build:1 && lerna run build:2",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "commitizen": "^4.2.5",
+    "cz-lerna-changelog": "^2.0.3",
+    "husky": "^8.0.2",
+    "lerna": "^5.6.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-lerna-changelog"
+    }
+  }
+}
