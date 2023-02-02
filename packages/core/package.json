@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "@extrator/core",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "lib": "dist"
+  },
+  "scripts": {
+    "build:1": "rimraf dist && tsc --build --force",
+    "build": "yarn build:1",
+    "start:core": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@extrator/ts": "^0.0.4",
+    "@types/axios": "^0.14.0",
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.2.0"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "image-size": "^1.0.2",
+    "nodemon": "^2.0.20",
+    "pdfkit": "^0.13.0"
+  }
+}
