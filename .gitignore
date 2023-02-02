@@ -5,6 +5,7 @@ packages/fief/allure-results/
 packages/fief/allure-report/
 packages/datas/tsconfig.tsbuildinfo
 node_modules/
+downloads/
 .history/
 dist/
 .env
