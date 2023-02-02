@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "name": "@automacao/ts",
+  "version": "0.0.4",
+  "main": "tsconfig.json",
+  "devDependencies": {
+    "@types/node": "^18.8.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  }
+}
