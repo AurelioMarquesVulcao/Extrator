@@ -8,16 +8,15 @@
     "lib": "dist"
   },
   "scripts": {
-    "build:1": "rimraf dist && tsc --build --force",
+    "build:2": "rimraf dist && tsc --build --force",
     "build": "yarn build:1",
-    "make:data": "node dist/index.js",
     "serve": "dots-env -p './envs/' -c 'node ./dist/index.js'",
     "serve:watch": "dots-env -p './envs/' -c 'nodemon ./dist/index.js'",
     "build:watch": "dots-env -p './envs/' -c 'Starting server...' && nodemon --watch 'src/' --exec 'ts-node src/index.ts' --exec 'tsc --build --force' -e ts",
-    "start:manga": "nodemon ./dist/index.js"
+    "start:manga": "node dist/index.js"
   },
   "devDependencies": {
-    "@automacao/ts": "^0.0.4",
+    "@extrator/ts": "^0.0.4",
     "@types/axios": "^0.14.0",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
@@ -31,6 +30,7 @@
     "eslint-plugin-promise": "^5.2.0"
   },
   "dependencies": {
+    "@extrator/core": "^0.1.0",
     "fs": "^0.0.1-security",
     "image-size": "^1.0.2",
     "nodemon": "^2.0.20",

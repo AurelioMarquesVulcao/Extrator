@@ -1,5 +1,5 @@
 {
-  "extends": "@automacao/ts",
+  "extends": "@extrator/ts",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",

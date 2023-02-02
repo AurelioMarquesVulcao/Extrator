@@ -1,1 +1,3 @@
-console.log("olá mundo e eur amo yasmin");
+import { testCore, convertImageFolderPdf } from "@extrator/core"
+
+testCore("Aurelio")
