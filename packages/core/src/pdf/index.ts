@@ -3,11 +3,14 @@ import sizeOf from 'image-size';
 import PDFKit from 'pdfkit';
 
 export const convertFolderToPDF = (folder: string, outputPath: string): void => {
+    if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder);
+      }
     let doc = new PDFKit();
     fs.readdir(folder, (_, files) => {
-        console.log("********************************");
-        console.log(files);
-        console.log("********************************");
+        // console.log("********************************");
+        // console.log(files);
+        // console.log("********************************");
         files.forEach((file, index) => {
             const filePath = `${folder}/${file}`;
             try {
@@ -27,6 +30,7 @@ export const convertFolderToPDF = (folder: string, outputPath: string): void => 
         });
         doc.pipe(fs.createWriteStream(outputPath));
         doc.end();
+        console.log("PDF Gerado com sucesso");
     });
 }
 

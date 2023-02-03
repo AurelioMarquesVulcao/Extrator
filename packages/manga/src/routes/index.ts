@@ -9,16 +9,16 @@ class Routes {
     this.extracMangas()
   }
   private open(): void {
-    this.router.get('/', (req,res)=>{
+    this.router.get('/', (req, res) => {
       res.send({ message: "Você esta no APP " });
-    }  
+    }
     )
   }
-  private extracMangas():void{
-    this.router.post('/extract',(req,res)=>{
+  private extracMangas(): void {
+    this.router.post('/extract', (req, res) => {
       // console.log(req);
       // console.log(req.body);
-      extractManga(req.body.url,req.body.manga,req.body.parse)
+      extractManga(req.body.url, req.body.manga, req.body.parse, req.body.parseButton, req.body.caps)
       res.send({ message: "Extração iniciada" });
     })
   }

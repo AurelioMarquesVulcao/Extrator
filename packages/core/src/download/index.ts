@@ -9,9 +9,19 @@ export const downloadSoft = async (link: any, folder: string, nameFile: string, 
   try {
     let name
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    
+    // verifica se a pasta aterior a pasta final existe
+    // se não existe cria
+    const regex = /(\S*)\//gm;
+    if (!Fs.existsSync(folder.match(regex)[0])) {
+      Fs.mkdirSync(folder.match(regex)[0]);
+    }
+    // verifica se a pasta final do download existe
+    // se não existe cria
     if (!Fs.existsSync(folder)) {
       Fs.mkdirSync(folder);
     }
+
     for (let i = 0; i < link.length; i++) {
       // await 2 seconds for each download
       await sleep(2000)

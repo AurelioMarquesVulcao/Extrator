@@ -77,7 +77,7 @@ const parsePages = async (firstPage) => {
   await pdf()
 
   console.log('Terminado capitulo ' + capitulo);
-  capitulo++
+      
   // await sleep(60000)
 
   if (capitulo < capitulos + 1) {
