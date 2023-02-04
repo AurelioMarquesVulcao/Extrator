@@ -37,7 +37,7 @@ export const extractManga = async (url: string, manga: string, parse: string, pa
 const extract = async (url: string, manga: string, parse: string, paseButton: string, caps: any) => {
   urlPage = []
   const pasta = "/home/vulcao/aurelio/Extrator/downloads/" + manga + "/" + capitulo
-  const pastaSainda = "/home/vulcao/aurelio/Extrator/downloads/" + capitulo + " - " + manga + ".pdf"
+  const pastaSainda = "/home/vulcao/aurelio/Extrator/downloads/" + manga + "/" + capitulo + " - " + manga + ".pdf"
   const extensionFile = ".jpg"
 
   await downloadSoftUrl(await parsePages(url, manga, parse, paseButton, caps), pasta, manga, extensionFile)
