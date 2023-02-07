@@ -1,6 +1,11 @@
 import express from "express"
 import cors from "cors"
 import Routes from "./routes"
+
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+console.log(numCPUs);
+
 // import {routes} from "routes"
 // const cors = require("cors");
 // const express = require("express");
@@ -16,9 +21,10 @@ class App {
     this.middlewares();
     this.routes();
 
-    this.express.listen(port, () =>
-      console.log(`Sua API REST está funcionando na porta ${port} `)
-    );
+    this.multi()
+    // this.express.listen(port, () =>
+    //   console.log(`Sua API REST está funcionando na porta ${port} `)
+    // );
     // this.bot();
   }
 
@@ -34,6 +40,35 @@ class App {
     this.express.use('', Routes.router)
   }
 
-  
+  multi() {
+    // For Master process
+    if (cluster.isMaster) {
+      console.log(`Master ${process.pid} is running`);
+
+      // Fork workers.
+      for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+      }
+
+      // This event is firs when worker died
+      cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`);
+      });
+    }
+
+    // For Worker
+    else {
+
+      // Workers can share any TCP connection
+      // In this case it is an HTTP server
+      this.express.listen(port, err => {
+        err ?
+          console.log("Error in server setup") :
+          console.log(`Worker ${process.pid} started`);
+      });
+    }
+  }
+
+
 }
 module.exports = new App();
