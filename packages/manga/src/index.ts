@@ -49,7 +49,6 @@ class App {
       for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
       }
-
       // This event is firs when worker died
       cluster.on('exit', (worker, code, signal) => {
         console.log(`worker ${worker.process.pid} died`);
@@ -58,7 +57,6 @@ class App {
 
     // For Worker
     else {
-
       // Workers can share any TCP connection
       // In this case it is an HTTP server
       this.express.listen(port, err => {
@@ -68,7 +66,5 @@ class App {
       });
     }
   }
-
-
 }
 module.exports = new App();
