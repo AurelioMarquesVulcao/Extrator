@@ -40,6 +40,9 @@ class App {
     this.express.use('', Routes.router)
   }
 
+  /*
+  Abre em multi processamento para não bagunçar a geração de arquivo 
+  */
   multi() {
     // For Master process
     if (cluster.isMaster) {
