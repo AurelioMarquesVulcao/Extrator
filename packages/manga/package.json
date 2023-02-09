@@ -10,7 +10,7 @@
   "scripts": {
     "build:2": "rimraf dist && tsc --build --force",
     "build": "yarn build:1",
-    "serve": "dots-env -p './envs/' -c 'node ./dist/index.js'",
+    "serve:manga": "nodemon dist/index.js",
     "serve:watch": "dots-env -p './envs/' -c 'nodemon ./dist/index.js'",
     "build:watch": "dots-env -p './envs/' -c 'Starting server...' && nodemon --watch 'src/' --exec 'ts-node src/index.ts' --exec 'tsc --build --force' -e ts",
     "start:manga": "nodemon dist/index.js"

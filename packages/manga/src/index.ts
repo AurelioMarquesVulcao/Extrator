@@ -11,7 +11,7 @@ console.log(numCPUs);
 // const express = require("express");
 
 
-const port = "3333"
+const port = "3300"
 // const this.express = express()
 class App {
   public express: express.Application
