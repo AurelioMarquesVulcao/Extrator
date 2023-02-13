@@ -4,6 +4,9 @@ import { testPrivate, testPublic } from "./RSA/keys";
 import { rsaDecryptSHA512 } from "./RSA/RSA-decrypt";
 import { rsaEncryptSHA512 } from "./RSA/RSA-encrypt";
 import { privateKey, publicKey } from "./RSA/RSA-keys";
+// import { Robo } from "./Robo";
+const { Robo } = require('./robo');
+
 // import { rsaKeyParGenerate } from "./RSA/RSA-keys";
 
 
@@ -28,7 +31,16 @@ console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
 console.timeEnd("segunto teste")
 
 // console.log(rsaKeyParGenerate());
+let estrair = async () => {
 
+  let robo = new Robo();
+  let teste = await robo.acessar({
+    url: "https://www.google.com/",
+  })
+console.log(teste.responseBody);
+}
+
+// estrair()
 
 
 
