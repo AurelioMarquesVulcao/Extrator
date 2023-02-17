@@ -36,6 +36,7 @@ export class Loggers {
           level: 'error',
           format: winston.format.json()
         }),
+        
         // new winston.transports.File({
         //   filename: 'error.log',
         //   level: 'info',
