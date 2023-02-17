@@ -9,4 +9,5 @@ downloads/
 .history/
 dist/
 .env
+packages/core/error.log
 cypress.env.json
