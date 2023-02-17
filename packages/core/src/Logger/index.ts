@@ -1,5 +1,7 @@
-// import {winston} from 'winston'
-import winston from 'winston';
+import winston from 'winston'
+// import { transports } from 'winston';
+// require('winston-mongodb').MongoDB;
+import { MongoDB } from "winston-mongodb";
 
 
 // const ambiente = "production"
@@ -15,7 +17,6 @@ export class Loggers {
   service: string;
   logs: Array<any>;
   consoleLogger: any
-  // log: any
 
   constructor(
     nomeArquivo = '',
@@ -23,35 +24,23 @@ export class Loggers {
   ) {
     this.service = service;
     this.logs = [];
-    // this.log
-    // if (ambiente === "production") {
-    //   this.log = new winston.transports.Console({
-    //     level: 'info',
-    //     format: winston.format.json()
-    //   })
-    // }
-    // if (ambiente === "develop") {
-    //   this.log = new winston.transports.Console({
-    //     level: 'info',
-    //     format: winston.format.combine(
-    //       winston.format.colorize(),
-    //       winston.format.simple()
-    //     )
-    //   })
-    // }
+
+  
 
     this.consoleLogger = winston.createLogger({
       transports: [
+
+   
         new winston.transports.File({
           filename: 'error.log',
           level: 'error',
           format: winston.format.json()
         }),
-        new winston.transports.File({
-          filename: 'error.log',
-          level: 'info',
-          format: winston.format.json()
-        }),
+        // new winston.transports.File({
+        //   filename: 'error.log',
+        //   level: 'info',
+        //   format: winston.format.json()
+        // }),
         // new winston.transports.Console({
         //   level: 'info',
         //   format: winston.format.json()
@@ -62,7 +51,17 @@ export class Loggers {
             winston.format.colorize(),
             winston.format.simple()
           )
-        })
+        }),
+        // level: 'error',
+        // options: {
+        //   useUnifiedTopology: true
+        // },
+        // collection: 'Server Logs',
+        // format: winston.format.combine(
+        //   winston.format.timestamp(),
+        //   winston.format.json()
+        // )
+
       ]
     });
 
@@ -75,6 +74,7 @@ export class Loggers {
    */
   info(log: string) {
     this.logs.push(`${this.service}  - ${log}`);
+   
     return this.consoleLogger.info(
       `${this.service} -> ${log}`
     );
@@ -114,11 +114,11 @@ export class Loggers {
   }
 
 
-
   resetLog() {
     this.logs = [];
     return this.logs
   }
+
 
   //Para tranferir os logs entre arquivos 
 
