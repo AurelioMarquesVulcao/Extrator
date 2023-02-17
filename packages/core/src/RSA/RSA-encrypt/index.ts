@@ -1,7 +1,9 @@
-const crypto = require("crypto");
+import crypto from "crypto";
+import { Loggers } from "../../Logger";
+const logger = new Loggers("teste", "crypto")
 
 export const rsaEncryptSHA512 = (text: string, publicKey: any): any => {
-  try{
+  try {
     const encryptedData = crypto.publicEncrypt(
       {
         key: publicKey,
@@ -12,10 +14,11 @@ export const rsaEncryptSHA512 = (text: string, publicKey: any): any => {
       // We convert the data string to a buffer using `Buffer.from`
       Buffer.from(text)
     );
+    logger.info("Encrypt sucessfull")
     return encryptedData.toString("base64")
-  }catch{
-    console.log("Erro Decrypt"); 
-  } 
+  } catch {
+    logger.error("Erro Decrypt");
+  }
 }
 
 

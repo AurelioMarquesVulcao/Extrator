@@ -4,10 +4,8 @@ import { testPrivate, testPublic } from "./RSA/keys";
 import { rsaDecryptSHA512 } from "./RSA/RSA-decrypt";
 import { rsaEncryptSHA512 } from "./RSA/RSA-encrypt";
 import { privateKey, publicKey } from "./RSA/RSA-keys";
-// import { Robo } from "./Robo";
 const { Robo } = require('./robo');
 
-// import { rsaKeyParGenerate } from "./RSA/RSA-keys";
 
 
 export const convertImageFolderPdf = convertFolderToPDF
@@ -21,16 +19,18 @@ export const testCore = (name: string) => {
   console.log("olá mundo, me chamo: " + name);
 }
 // testCore("jon Doe!")
-let lorem = "Lorem ipsum dolor sit amet, "
-console.time("primeiro teste")
-console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, testPublic), testPrivate));
-console.timeEnd("primeiro teste")
+(async()=>{
+  let lorem = "Lorem ipsum dolor sit amet"
+  console.time("primeiro teste")
+  // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, testPublic), testPrivate));
+  rsaDecryptSHA512(rsaEncryptSHA512(lorem, testPublic), testPrivate)
+  console.timeEnd("primeiro teste")
+  // console.time("segunto teste")
+  // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
+  // console.timeEnd("segunto teste")
+})()
 
-console.time("segunto teste")
-console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
-console.timeEnd("segunto teste")
 
-// console.log(rsaKeyParGenerate());
 let estrair = async () => {
 
   let robo = new Robo();
@@ -40,7 +40,7 @@ let estrair = async () => {
 console.log(teste.responseBody);
 }
 
-// estrair()
+
 
 
 

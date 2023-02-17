@@ -1,4 +1,8 @@
-const crypto = require("crypto");
+import exp from "constants";
+import crypto from "crypto";
+import { Loggers } from "../../Logger";
+
+const logger = new Loggers("teste", "crypto")
 
 export const rsaDecryptSHA512 = (text: string, privateKey: any): any => {
   try {
@@ -14,11 +18,11 @@ export const rsaDecryptSHA512 = (text: string, privateKey: any): any => {
       },
       Buffer.from(text, "base64")
     );
-    console.log("Decrypt sucess");
+    logger.info("Decrypt sucessfull")
     return decryptedData.toString()
-  } catch  {
-    console.error("Error in Decrypt");
-    return false
+  } catch {
+    logger.error("Error in Decrypt")
+    return null
   }
 }
 
