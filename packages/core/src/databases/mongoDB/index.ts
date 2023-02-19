@@ -1,67 +1,50 @@
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 const mongoose = require("mongoose");
-// require("dotenv/config");
-import {teste} from '../model/teste'
-
+import RequireDir from "require-dir";
+import { TesteModel } from "../models/teste";
 
 dotenv.config();
 
-export const conectMongo = async(callback = () => null) => {
-    try {
-        console.log(process.env.MONGO_URL);
-        mongoose.set('strictQuery', true);
-        await mongoose.connect(process.env.MONGO_URL, {
-            
-        })
-        // await mongoose.connect(url, {
-        //     useCreateIndex: true,
-        //     useNewUrlParser: true,
-        //     useUnifiedTopology: true,
-        // });
-        console.log("Conectado ao mongo");
-       
+export const conectMongo = async (callback = () => null) => {
+  try {
+    console.log(process.env.MONGO_URL);
+    mongoose.set("strictQuery", true);
+    await mongoose.connect(process.env.MONGO_URL, {});
+    // await mongoose.connect(url, {
+    //     useCreateIndex: true,
+    //     useNewUrlParser: true,
+    //     useUnifiedTopology: true,
+    // });
 
-        // new DataProduct({
-        //   creatDate: new Date(),
-        // }).save();
-        // let teste =DataProduct.findOne({})
-        // console.log(teste);
-        callback()
-    } catch (e) {
-        console.log(e);
-    }
-}
+    RequireDir("../models");
 
-export const disconnectMongo = async() => {
-    try {
-        // new teste({teste:'teste 01'}).save();
-        // let testes =teste.findOne({})
-        // console.log(testes);
-        await mongoose.connection.close();
-        console.log("Desconectado do mongo");
-    } catch (e) {
-        console.log(e);
-    }
-}
+    console.log("Conectado ao mongo");
 
+    await testaconection();
 
-// export const bootstrap = async (callback = () => null) => {
-//     try {
-//       dotenv.config()
-  
-//       console.log(`[INFO] Trying connect to database ${process.env.MONGO_CONNECTION_STRING}`)
-//       await Mongoose.connect(process.env.MONGO_CONNECTION_STRING, {})
-  
-//       requireDefaultModelsDir()
-//       RequireDir('./models')
-  
-//       console.log('[INFO] Successfully database connection')
-//       await createRegisters()
-  
-//       callback()
-//     } catch (error) {
-//       console.error('[ERROR] Unexpected error on Connecting Mongo Database', error)
-//       setTimeout(() => bootstrap(callback), 10000)
-//     }
-//   }
-  
+    callback();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const disconnectMongo = async () => {
+  try {
+    await mongoose.connection.close();
+    console.log("Desconectado do mongo");
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const testaconection = async () => {
+  console.time("find One");
+  const settings = await TesteModel.findOne();
+  console.timeEnd("find One");
+  console.log(settings);
+  if (!settings) {
+    let data = [new TesteModel({ teste: "foi" })];
+    await data.forEach(async (item) => item.save());
+  }
+};
+

@@ -1,8 +1,8 @@
-import winston from 'winston'
+import winston from "winston";
 // import { transports } from 'winston';
 // require('winston-mongodb').MongoDB;
 import { MongoDB } from "winston-mongodb";
-
+import { LoggerModel } from "../databases/models/logger";
 
 // const ambiente = "production"
 // const ambiente = "develop"
@@ -16,27 +16,20 @@ import { MongoDB } from "winston-mongodb";
 export class Loggers {
   service: string;
   logs: Array<any>;
-  consoleLogger: any
+  consoleLogger: any;
 
-  constructor(
-    nomeArquivo = '',
-    service: string,
-  ) {
+  constructor(nomeArquivo = "", service: string) {
     this.service = service;
     this.logs = [];
 
-  
-
     this.consoleLogger = winston.createLogger({
       transports: [
-
-   
         new winston.transports.File({
-          filename: 'error.log',
-          level: 'error',
-          format: winston.format.json()
+          filename: "error.log",
+          level: "error",
+          format: winston.format.json(),
         }),
-        
+
         // new winston.transports.File({
         //   filename: 'error.log',
         //   level: 'info',
@@ -47,11 +40,11 @@ export class Loggers {
         //   format: winston.format.json()
         // })
         new winston.transports.Console({
-          level: 'info',
+          level: "info",
           format: winston.format.combine(
             winston.format.colorize(),
             winston.format.simple()
-          )
+          ),
         }),
         // level: 'error',
         // options: {
@@ -62,11 +55,8 @@ export class Loggers {
         //   winston.format.timestamp(),
         //   winston.format.json()
         // )
-
-      ]
+      ],
     });
-
-
   }
 
   /**
@@ -75,10 +65,8 @@ export class Loggers {
    */
   info(log: string) {
     this.logs.push(`${this.service}  - ${log}`);
-   
-    return this.consoleLogger.info(
-      `${this.service} -> ${log}`
-    );
+    this.saveLogs("info", this.service, log);
+    return this.consoleLogger.info(`${this.service} -> ${log}`);
   }
 
   /**
@@ -87,9 +75,8 @@ export class Loggers {
    */
   error(log: string) {
     this.logs.push(`${this.service}  - ${log}`);
-    return this.consoleLogger.error(
-      `${this.service} -> ${log}`
-    );
+    this.saveLogs("error", this.service, log);
+    return this.consoleLogger.error(`${this.service} -> ${log}`);
   }
 
   /**
@@ -98,30 +85,34 @@ export class Loggers {
    */
   warn(log: string) {
     this.logs.push(`${this.service}  - ${log}`);
-    return this.consoleLogger.warn(
-      `${this.service} -> ${log}`
-    );
+    this.saveLogs("warn", this.service, log);
+    return this.consoleLogger.warn(`${this.service} -> ${log}`);
   }
 
   /**
-  * Faz um print no console de erro
-  * @param {string} log mensagem
-  */
+   * Faz um print no console de erro
+   * @param {string} log mensagem
+   */
   debug(log: string) {
     this.logs.push(`${this.service}  - ${log}`);
-    return this.consoleLogger.debug(
-      `${this.service} -> ${log}`
-    );
-  }
+    this.saveLogs("debug", this.service, log);
 
+    return this.consoleLogger.debug(`${this.service} -> ${log}`);
+  }
 
   resetLog() {
     this.logs = [];
-    return this.logs
+    return this.logs;
   }
 
-
-  //Para tranferir os logs entre arquivos 
+  saveLogs(level: string, service: string, message: string) {
+    new LoggerModel({
+      level,
+      service,
+      message,
+    }).save();
+  }
+  //Para tranferir os logs entre arquivos
 
   allLog() {
     return this.logs;

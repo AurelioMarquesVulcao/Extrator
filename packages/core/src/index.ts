@@ -21,6 +21,7 @@ export const testCore = (name: string) => {
 }
 // testCore("jon Doe!")
 (async()=>{
+  await conectMongo()
   let lorem = "Lorem ipsum dolor sit amet"
   console.time("primeiro teste")
   // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, testPublic), testPrivate));
@@ -29,8 +30,7 @@ export const testCore = (name: string) => {
   // console.time("segunto teste")
   // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
   // console.timeEnd("segunto teste")
-  await conectMongo()
-  await disconnectMongo()
+  // await disconnectMongo()
 })()
 
 
