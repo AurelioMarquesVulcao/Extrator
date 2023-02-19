@@ -1,3 +1,4 @@
+import { conectMongo, disconnectMongo } from "./databases/mongoDB";
 import { downloadSoft } from "./download";
 import { convertFolderToPDF } from "./pdf"
 import { testPrivate, testPublic } from "./RSA/keys";
@@ -28,6 +29,8 @@ export const testCore = (name: string) => {
   // console.time("segunto teste")
   // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
   // console.timeEnd("segunto teste")
+  await conectMongo()
+  await disconnectMongo()
 })()
 
 
@@ -39,7 +42,6 @@ let estrair = async () => {
   })
 console.log(teste.responseBody);
 }
-
 
 
 
