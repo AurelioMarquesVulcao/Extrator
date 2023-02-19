@@ -1,9 +1,14 @@
+import { Loggers } from "../Logger";
+
 const { default: axios } = require("axios");
 // const cheerio = require('cheerio');
 const Fs = require('fs');
 const { readFile } = require('fs');
 const Path = require('path');
 const sleep = require('await-sleep')
+
+const logger = new Loggers("downloader", "downloader");
+
 
 export const downloadSoft = async (link: any, folder: string, nameFile: string, extensionFile: string) => {
   try {
@@ -45,12 +50,15 @@ export const downloadSoft = async (link: any, folder: string, nameFile: string, 
       new Promise((resolve, reject) => {
         response.data.on('end', () => {
           resolve(null);
-          console.log('Url foi baixada com sucesso.' + i);
+          logger.info('Url foi baixada com sucesso.' + i)
+          // console.log('Url foi baixada com sucesso.' + i);
 
         });
         response.data.on('error', (err) => {
           reject(err);
-          console.log('Url falhou...');
+          // console.log('Url falhou...');
+          logger.error('Url falhou...' + i)
+
           const error = new Error('Não foi possivél baixar o documento');
           throw error;
         });

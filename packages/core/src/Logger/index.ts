@@ -106,11 +106,13 @@ export class Loggers {
   }
 
   saveLogs(level: string, service: string, message: string) {
+    console.time("Tempo de salvamento de log")
     new LoggerModel({
       level,
       service,
       message,
     }).save();
+    console.timeEnd("Tempo de salvamento de log")
   }
   //Para tranferir os logs entre arquivos
 
