@@ -10,7 +10,7 @@ const logger = new Logger("download", "Extrator Manga");
 // var urlManga = "https://mangayabu.top/ler/one-piece-capitulo-701-my12892/"
 
 // Problema na variavé de parse
-var parseImages = 'img[gear="satoshi"]';
+var parseImages;
 //var parseProximoCapitulo = 'a[title="Próximo Capítulo"]'
 
 var capitulo;
@@ -28,6 +28,8 @@ export const extractManga = async (
   paseButton: string,
   caps: any
 ) => {
+  parseImages = parse;
+
   // console.log(url);
   // console.log(manga);
   // console.log(parse);
@@ -51,8 +53,16 @@ const extract = async (
   caps: any
 ) => {
   urlPage = [];
-  const pasta = "/home/aurelio/meta/Extrator/downloads/" + manga + "/" + capitulo
-  const pastaSainda = "/home/aurelio/meta/Extrator/downloads/" + manga + "/" + capitulo + " - " + manga + ".pdf"
+  const pasta =
+    "/home/aurelio/meta/Extrator/downloads/" + manga + "/" + capitulo;
+  const pastaSainda =
+    "/home/aurelio/meta/Extrator/downloads/" +
+    manga +
+    "/" +
+    capitulo +
+    " - " +
+    manga +
+    ".pdf";
   // const pasta = "/app/downloads/" + manga + "/" + capitulo;
   // const pastaSainda =
   //   "/app/downloads/" + manga + "/" + capitulo + " - " + manga + ".pdf";
