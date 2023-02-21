@@ -7,7 +7,7 @@ const { readFile } = require('fs');
 const Path = require('path');
 const sleep = require('await-sleep')
 
-const logger = new Loggers("downloader", "downloader");
+const logger = new Loggers( "downloader");
 
 
 export const downloadSoft = async (link: any, folder: string, nameFile: string, extensionFile: string) => {

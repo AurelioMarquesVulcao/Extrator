@@ -3,7 +3,7 @@ import sizeOf from "image-size";
 import PDFKit from "pdfkit";
 import { Loggers } from "../Logger";
 
-const logger = new Loggers("pdf", "Gerador de PDF");
+const logger = new Loggers( "Gerador de PDF");
 
 export const convertFolderToPDF = (
   folder: string,

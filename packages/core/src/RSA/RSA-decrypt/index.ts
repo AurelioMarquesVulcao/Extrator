@@ -2,7 +2,7 @@ import exp from "constants";
 import crypto from "crypto";
 import { Loggers } from "../../Logger";
 
-const logger = new Loggers("teste", "crypto")
+const logger = new Loggers( "crypto")
 
 export const rsaDecryptSHA512 = (text: string, privateKey: any): any => {
   try {

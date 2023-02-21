@@ -17,9 +17,13 @@ export class Loggers {
   service: string;
   logs: Array<any>;
   consoleLogger: any;
+  processId: string;
+  childProcessId: string;
 
-  constructor(nomeArquivo = "", service: string) {
+  constructor(service: string, processId = "", childProcessId = "") {
     this.service = service;
+    this.processId = processId;
+    this.childProcessId = childProcessId;
     this.logs = [];
 
     this.consoleLogger = winston.createLogger({
@@ -106,13 +110,23 @@ export class Loggers {
   }
 
   saveLogs(level: string, service: string, message: string) {
-    console.time("Tempo de salvamento de log")
-    new LoggerModel({
-      level,
-      service,
-      message,
-    }).save();
-    console.timeEnd("Tempo de salvamento de log")
+    console.time("Tempo de salvamento de log");
+    if (this.processId.length > 0) {
+      new LoggerModel({
+        processId: this.processId,
+        childProcessId: this.childProcessId,
+        level,
+        service,
+        message,
+      }).save();
+    } else {
+      new LoggerModel({
+        level,
+        service,
+        message,
+      }).save();
+    }
+    console.timeEnd("Tempo de salvamento de log");
   }
   //Para tranferir os logs entre arquivos
 
