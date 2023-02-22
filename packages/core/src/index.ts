@@ -20,22 +20,28 @@ export const rsaEncrypt = rsaEncryptSHA512;
 export const rsaPrivateKey4096 = privateKey;
 export const rsaPublicKey4096 = publicKey;
 export const Logger = Loggers;
+export {
+  conectMongo,
+  disconnectMongo,
+  extractionSave,
+  processingSave,
+} from "./databases/mongoDB";
+export { Processing, Extracting } from "./@types";
 
 export const testCore = (name: string) => {
   console.log("olá mundo, me chamo: " + name);
 };
 // testCore("jon Doe!")
 (async () => {
-  await conectMongo();
-  let teste = {
-    name: "Jon Doe",
-    email: "jon.doe@gmail.com",
-    password: "12345679",
-    role: "admin",
-  };
-  await processingSave(teste);
-  await extractionSave("12345","123456", teste, "started");
-
+  // await conectMongo();
+  // let teste = {
+  //   name: "Jon Doe",
+  //   email: "jon.doe@gmail.com",
+  //   password: "12345679",
+  //   role: "admin",
+  // };
+  // await processingSave(teste);
+  // await extractionSave("12345","123456", teste, "started");
   // let lorem = "Lorem ipsum dolor sit amet"
   // console.time("primeiro teste")
   // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, testPublic), testPrivate));
@@ -44,7 +50,7 @@ export const testCore = (name: string) => {
   // console.time("segunto teste")
   // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
   // console.timeEnd("segunto teste")
-  await disconnectMongo();
+  // await disconnectMongo();
 })();
 
 // let estrair = async () => {

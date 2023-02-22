@@ -7,9 +7,11 @@ import Hash from "object-hash";
 import { ProcessingModel } from "../models/processing";
 import sleep from "await-sleep";
 import { ExtractionModel } from "../models/extraction";
+import { Extracting, Processing } from "../../@types";
+
 
 dotenv.config();
-const logger = new Loggers( "MongoDB");
+const logger = new Loggers("MongoDB");
 
 export const conectMongo = async (callback = () => null) => {
   try {
@@ -45,7 +47,9 @@ export const disconnectMongo = async () => {
   }
 };
 
-export const processingSave = async (dataProcessing: object): Promise<void> => {
+export const processingSave = async (
+  dataProcessing: object
+): Promise<Processing> => {
   await genericSave(
     ProcessingModel,
     {
@@ -56,6 +60,9 @@ export const processingSave = async (dataProcessing: object): Promise<void> => {
     },
     "dataProcessingId"
   );
+  return await ProcessingModel.findOne({
+    dataProcessingId: Hash(dataProcessing),
+  });
 };
 
 /**
@@ -70,6 +77,8 @@ export const extractionSave = async (
   dataExtraction: object,
   status: string
 ): Promise<void> => {
+  console.log(processingId);
+  
   if (status === "started") {
     await genericSave(
       ExtractionModel,
@@ -80,7 +89,7 @@ export const extractionSave = async (
         erro: false,
         dataExtraction,
       },
-      processingId
+      "processingId"
     );
   }
   if (status === "runing") {
@@ -107,6 +116,8 @@ const genericSave = async (
 ): Promise<void> => {
   console.time("Tempo de salvamento no MongoDB");
   const data = new model(modelObject);
+  console.log({[validateId]: data[validateId]});
+  
   const validate = await model.findOne({
     [validateId]: data[validateId],
   });

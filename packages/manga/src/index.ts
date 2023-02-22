@@ -1,34 +1,36 @@
-import express from "express"
-import cors from "cors"
-import Routes from "./routes"
+import express from "express";
+import cors from "cors";
+import Routes from "./routes";
 
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+const cluster = require("cluster");
+// const numCPUs = require('os').cpus().length;
+const numCPUs = 1;
 console.log(numCPUs);
 
 // import {routes} from "routes"
 // const cors = require("cors");
 // const express = require("express");
 
-
-const port = "3300"
+const port = "3300";
 // const this.express = express()
 class App {
-  public express: express.Application
+  public express: express.Application;
   public constructor() {
-    this.express = express()
+    this.express = express();
     // this.database();
     this.middlewares();
     this.routes();
 
-    this.multi()
+    this.multi();
+
+    console.log(new Date());
+    
+
     // this.express.listen(port, () =>
     //   console.log(`Sua API REST está funcionando na porta ${port} `)
     // );
     // this.bot();
   }
-
-
 
   middlewares() {
     this.express.use(express.json());
@@ -37,7 +39,7 @@ class App {
 
   routes() {
     // this.express.use(routes);
-    this.express.use('', Routes.router)
+    this.express.use("", Routes.router);
   }
 
   /*
@@ -53,7 +55,7 @@ class App {
         cluster.fork();
       }
       // This event is firs when worker died
-      cluster.on('exit', (worker, code, signal) => {
+      cluster.on("exit", (worker, code, signal) => {
         console.log(`worker ${worker.process.pid} died`);
       });
     }
@@ -62,10 +64,10 @@ class App {
     else {
       // Workers can share any TCP connection
       // In this case it is an HTTP server
-      this.express.listen(port, err => {
-        err ?
-          console.log("Error in server setup") :
-          console.log(`Worker ${process.pid} started`);
+      this.express.listen(port, (err) => {
+        err
+          ? console.log("Error in server setup")
+          : console.log(`Worker ${process.pid} started`);
       });
     }
   }
