@@ -1,3 +1,5 @@
+/** @format */
+
 import { conectMongo, convertImageFolderPdf, downloadSoftUrl, Logger, processingSave } from '@extrator/core'
 import axios from 'axios'
 import cheerioModule from 'cheerio'
@@ -7,7 +9,7 @@ import { disconnectMongo } from '@extrator/core'
 import { extractionSave } from '@extrator/core'
 import { resolve } from 'path'
 
-// // Problema na variavél urlPage, esta com problemas devido a tipagem
+// Problema na variavél urlPage, esta com problemas devido a tipagem
 var urlPage = []
 
 export class ExtractManga {
@@ -27,6 +29,15 @@ export class ExtractManga {
     this.capitulos
     this.path = resolve(__dirname, '../../../../')
   }
+
+  /**
+   * It extracts the manga from the url.
+   * @param {string} url - The url of the manga
+   * @param {string} manga - name of the manga
+   * @param {string} parse - is the selector that will be used to find the images on the page
+   * @param {string} parseButton - The button that will be clicked to go to the next chapter.
+   * @param {any} caps - [capitulo, capitulos]
+   */
   async extractManga(url: string, manga: string, parse: string, parseButton: string, caps: any) {
     const save = await processingSave({ url, manga, parse, parseButton, caps })
     this.dataProcessingId = save.dataProcessingId
@@ -58,14 +69,10 @@ export class ExtractManga {
     urlPage = []
     const pasta = `${this.path}/downloads/${manga}/${this.capitulo}`
     const pastaSainda = `${this.path}/downloads/${manga}/${this.capitulo} - ${manga}.pdf`
-    // '/home/vulcao/aurelio/Extrator/downloads/' + manga + '/' + this.capitulo + ' - ' + manga + '.pdf'
-    // const pasta = "/app/downloads/" + manga + "/" + this.capitulo;
-    // const pastaSainda =
-    //   "/app/downloads/" + manga + "/" + this.capitulo + " - " + manga + ".pdf";
     const extensionFile = '.jpg'
 
     logger.info('download iniciado')
-    await downloadSoftUrl(await this.parsePages(url, manga, parse, parseButton, caps), pasta, manga, extensionFile)
+    await downloadSoftUrl(await this.parsePages(url, parseButton), pasta, manga, extensionFile)
 
     await sleep(5000)
     logger.info('download finalizado')
@@ -74,34 +81,51 @@ export class ExtractManga {
     logger.info('Extracting cap: ' + this.capitulo + ' end!')
 
     this.capitulo++
+
+    /* A recursive function that will be called until the end of the manga. */
     if (this.capitulo < this.capitulos + 1) {
       await sleep(5000)
       logger.info('Nova extração iniciada')
-      console.log(urlPage[urlPage.length - 1], manga, parse, parseButton, caps)
-
       await this.extract(urlPage[urlPage.length - 1], manga, parse, parseButton, caps)
     }
   }
 
-  // extract html from first page
+  /**
+   * It takes a url as an argument, makes a request to that url, and returns the HTML data from that request
+   * @param {string} url - The url of the site you want to extract
+   * @returns The HTML data from the site
+   */
   async extractPage(url: string) {
     const site = await axios.get(url)
     const dataSite = site.data
     return dataSite
   }
 
-  async parsePages(firstPage: string, manga: string, parse: string, paseButton: string, caps: any) {
+  /**
+   * Extract the page, then extract the url of the next page, then extract the image.
+   * @param {string} firstPage - the first page of the manga
+   * @param {string} parseButton - is the button that will be used to navigate through the pages of the
+   * manga.
+   * @returns An array of url strings for download images.
+   */
+  async parsePages(firstPage: string, parseButton: string): Promise<Array<string>> {
     const body = await this.extractPage(firstPage)
     const $ = cheerioModule.load(body) //cheerio.load(body)
     // para Leitor.net
-    $(paseButton).each(async function (element) {
+    $(parseButton).each(async function (element) {
       let datas = $(this).attr('href')
       urlPage.push(datas)
     })
     return await this.parseImage(firstPage)
   }
 
-  async parseImage(page) {
+  /**
+   * It takes a page as a parameter, extracts the body of the page, loads the body into cheerio, and
+   * then extracts the image URLs from the body
+   * @param {string} page - url string - The page you want to extract the images from.
+   * @returns An array of url strings for download images
+   */
+  async parseImage(page: string): Promise<Array<string>> {
     let url = []
     const body = await this.extractPage(page)
     const $ = cheerioModule.load(body)
@@ -111,7 +135,6 @@ export class ExtractManga {
     })
     // REMOVE URL DESNECESSARIAS
     url.shift()
-    // console.log(url);
     return url
   }
 }

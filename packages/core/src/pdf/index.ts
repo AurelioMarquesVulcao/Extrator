@@ -7,6 +7,12 @@ import { Loggers } from '../Logger'
 
 const logger = new Loggers('Gerador de PDF')
 
+/**
+ * It takes a folder path and an output path, and then it creates a PDF file with all the images in the
+ * folder
+ * @param {string} folder - The folder where the images are located
+ * @param {string} outputPath - The path where the PDF will be saved.
+ */
 export const convertFolderToPDF = async (folder: string, outputPath: string): Promise<void> => {
   if (!fs.existsSync(folder)) {
     fs.mkdirSync(folder)

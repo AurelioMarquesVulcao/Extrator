@@ -1,3 +1,5 @@
+/** @format */
+
 import express from 'express'
 import cors from 'cors'
 import Routes from './routes'
@@ -8,8 +10,6 @@ import dotenv from 'dotenv'
 // const numCPUs = require('os').cpus().length;
 const numCPUs = 1
 console.log(numCPUs)
-
-
 
 // import {routes} from "routes"
 // const cors = require("cors");
@@ -68,7 +68,7 @@ class App {
     else {
       // Workers can share any TCP connection
       // In this case it is an HTTP server
-      this.express.listen(port, (err) => {
+      this.express.listen(port, err => {
         err ? console.log('Error in server setup') : console.log(`Worker ${process.pid} started`)
       })
     }
