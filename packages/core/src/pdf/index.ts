@@ -1,39 +1,37 @@
-import * as fs from "fs";
-import sizeOf from "image-size";
-import PDFKit from "pdfkit";
-import { Loggers } from "../Logger";
+/** @format */
 
-const logger = new Loggers( "Gerador de PDF");
+import * as fs from 'fs'
+import sizeOf from 'image-size'
+import PDFKit from 'pdfkit'
+import { Loggers } from '../Logger'
 
-export const convertFolderToPDF = (
-  folder: string,
-  outputPath: string
-): void => {
+const logger = new Loggers('Gerador de PDF')
+
+export const convertFolderToPDF = async (folder: string, outputPath: string): Promise<void> => {
   if (!fs.existsSync(folder)) {
-    fs.mkdirSync(folder);
+    fs.mkdirSync(folder)
   }
-  let doc = new PDFKit();
+  let doc = new PDFKit()
   fs.readdir(folder, (_, files) => {
     files.forEach((file, index) => {
-      const filePath = `${folder}/${file}`;
+      const filePath = `${folder}/${file}`
       try {
-        const size = sizeOf(filePath);
+        const size = sizeOf(filePath)
         if (index === 0) {
           doc = new PDFKit({
             size: [size.width, size.height],
-          });
+          })
         } else {
-          doc.addPage({ size: [size.width, size.height] });
+          doc.addPage({ size: [size.width, size.height] })
         }
 
-        doc.image(filePath, 0, 0, { width: size.width, height: size.height });
+        doc.image(filePath, 0, 0, { width: size.width, height: size.height })
       } catch {
-        return;
+        return
       }
-    });
-    doc.pipe(fs.createWriteStream(outputPath));
-    doc.end();
-    logger.info("PDF Gerado com sucesso");
-    // console.log("PDF Gerado com sucesso");
-  });
-};
+    })
+    doc.pipe(fs.createWriteStream(outputPath))
+    doc.end()
+    logger.info('PDF Gerado com sucesso')
+  })
+}
