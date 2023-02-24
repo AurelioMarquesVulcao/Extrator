@@ -3,36 +3,36 @@ import {
   disconnectMongo,
   extractionSave,
   processingSave,
-} from "./databases/mongoDB";
-import { downloadSoft } from "./download";
-import { Loggers } from "./Logger";
-import { convertFolderToPDF } from "./pdf";
-import { testPrivate, testPublic } from "./RSA/keys";
-import { rsaDecryptSHA512 } from "./RSA/RSA-decrypt";
-import { rsaEncryptSHA512 } from "./RSA/RSA-encrypt";
-import { privateKey, publicKey } from "./RSA/RSA-keys";
+} from './databases/mongoDB'
+import { downloadSoft } from './download'
+import { Loggers } from './Logger'
+import { convertFolderToPDF } from './pdf'
+import { testPrivate, testPublic } from './RSA/keys'
+import { rsaDecryptSHA512 } from './RSA/RSA-decrypt'
+import { rsaEncryptSHA512 } from './RSA/RSA-encrypt'
+import { privateKey, publicKey } from './RSA/RSA-keys'
 // const { Robo } = require('./robo');
 
-export const convertImageFolderPdf = convertFolderToPDF;
-export const downloadSoftUrl = downloadSoft;
-export const rsaDecrypt = rsaDecryptSHA512;
-export const rsaEncrypt = rsaEncryptSHA512;
-export const rsaPrivateKey4096 = privateKey;
-export const rsaPublicKey4096 = publicKey;
-export const Logger = Loggers;
+export const convertImageFolderPdf = convertFolderToPDF
+export const downloadSoftUrl = downloadSoft
+export const rsaDecrypt = rsaDecryptSHA512
+export const rsaEncrypt = rsaEncryptSHA512
+export const rsaPrivateKey4096 = privateKey
+export const rsaPublicKey4096 = publicKey
+export const Logger = Loggers
 export {
   conectMongo,
   disconnectMongo,
   extractionSave,
   processingSave,
-} from "./databases/mongoDB";
-export { Processing, Extracting } from "./@types";
+} from './databases/mongoDB'
+export { Processing, Extracting } from './@types'
 
 export const testCore = (name: string) => {
-  console.log("olá mundo, me chamo: " + name);
-};
+  console.log('olá mundo, me chamo: ' + name)
+}
 // testCore("jon Doe!")
-(async () => {
+;(async () => {
   // await conectMongo();
   // let teste = {
   //   name: "Jon Doe",
@@ -51,7 +51,7 @@ export const testCore = (name: string) => {
   // console.log(rsaDecryptSHA512(rsaEncryptSHA512(lorem, publicKey), privateKey));
   // console.timeEnd("segunto teste")
   // await disconnectMongo();
-})();
+})()
 
 // let estrair = async () => {
 
