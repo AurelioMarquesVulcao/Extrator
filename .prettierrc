@@ -3,6 +3,8 @@
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
+  "arrowParens": "avoid",
+  "insertPragma":true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
