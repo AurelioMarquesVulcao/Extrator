@@ -10,6 +10,8 @@ import dotenv from 'dotenv'
 // const numCPUs = require('os').cpus().length;
 const numCPUs = 1
 console.log(numCPUs)
+console.log(process.pid);
+
 
 // import {routes} from "routes"
 // const cors = require("cors");
@@ -28,7 +30,7 @@ class App {
 
     this.multi()
 
-    console.log(new Date())
+
 
     // this.express.listen(port, () =>
     //   console.log(`Sua API REST está funcionando na porta ${port} `)
