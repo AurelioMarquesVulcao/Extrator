@@ -1,5 +1,6 @@
 {
   "docwriter.hotkey.mac": "⌥ + .",
   "docwriter.progress.trackClasses": false,
-  "docwriter.hotkey.windows": "Alt + ."
+  "docwriter.hotkey.windows": "Alt + .",
+  "docwriter.progress.trackMethods": true
 }

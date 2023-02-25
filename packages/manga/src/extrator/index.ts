@@ -12,6 +12,10 @@ import { resolve } from 'path'
 // Problema na variavél urlPage, esta com problemas devido a tipagem
 var urlPage = []
 
+/* It receives a url, a manga name, a parse, a parseButton, and an array of numbers, and then it saves
+the data, sets the dataProcessingId, sets the parseImages, sets the capítulo, sets the capítulos,
+sets the path, creates a logger, logs the extraction of the manga, extracts the manga, and then logs
+the completion of the extraction */
 export class ExtractManga {
   logger: any
   dataProcessingId: string
@@ -20,6 +24,8 @@ export class ExtractManga {
   capitulo: number
   capitulos: number
   path: string
+
+  /* Initializing the variables. */
   constructor() {
     conectMongo()
     this.dataProcessingId
@@ -31,14 +37,17 @@ export class ExtractManga {
   }
 
   /**
-   * It extracts the manga from the url.
+   * It receives a url, a manga name, a parse, a parseButton, and an array of numbers, and then it
+   * saves the data, sets the dataProcessingId, sets the parseImages, sets the capítulo, sets the
+   * capítulos, sets the path, creates a logger, logs the extraction of the manga, extracts the manga,
+   * and then logs the completion of the extraction
    * @param {string} url - The url of the manga
-   * @param {string} manga - name of the manga
-   * @param {string} parse - is the selector that will be used to find the images on the page
-   * @param {string} parseButton - The button that will be clicked to go to the next chapter.
-   * @param {any} caps - [capitulo, capitulos]
+   * @param {string} manga - The name of the manga
+   * @param {string} parse - is the selector that will be used to find the image tag.
+   * @param {string} parseButton - The button that will be clicked to load the next page.
+   * @param caps - caps for extraction
    */
-  async extractManga(url: string, manga: string, parse: string, parseButton: string, caps: any) {
+  async extractManga(url: string, manga: string, parse: string, parseButton: string, caps: Array<number>) {
     const save = await processingSave({ url, manga, parse, parseButton, caps })
     this.dataProcessingId = save.dataProcessingId
     this.parseImages = parse
@@ -48,44 +57,50 @@ export class ExtractManga {
 
     const logger = new Logger('Extrator Manga', this.dataProcessingId)
 
-    logger.info(`Extrator Manga: ${manga}`)
-    logger.info('Extracting manga: ' + manga)
+    logger.info(`Extraindo Manga: ${manga}`)
 
-    // start extraction
     await this.extract(url, manga, parse, parseButton, caps)
-    logger.info('Extracting manga: ' + manga + ' end!')
+    logger.info('-------------- Extração concluída! --------------')
     disconnectMongo()
   }
 
+  /**
+   * It downloads the images from the manga, converts them to pdf and saves the pdf in a folder
+   * @param {string} url - The url of the manga.
+   * @param {string} manga - The name of the manga.
+   * @param {string} parse - The parameter that will be used to parse the pages of the manga.
+   * @param {string} parseButton - The button that will be clicked to go to the next page.
+   * @param {any} caps - The number of chapters in the manga.
+   */
   async extract(url: string, manga: string, parse: string, parseButton: string, caps: any) {
-    // criando identificador child
     this.processingId = Hash({ url, manga, parse, parseButton, caps, date: new Date() })
     const extract = { url, manga, parse, parseButton, caps, date: new Date() }
-
-    await extractionSave(this.dataProcessingId, this.processingId, extract, 'started')
-
-    const logger = new Logger('Extrator Manga', this.dataProcessingId, this.processingId)
-
     urlPage = []
     const pasta = `${this.path}/downloads/${manga}/${this.capitulo}`
     const pastaSainda = `${this.path}/downloads/${manga}/${this.capitulo} - ${manga}.pdf`
     const extensionFile = '.jpg'
 
-    logger.info('download iniciado')
-    await downloadSoftUrl(await this.parsePages(url, parseButton), pasta, manga, extensionFile)
+    /* Saving the extraction in the database. */
+    await extractionSave(this.dataProcessingId, this.processingId, extract, 'started')
 
+    const logger = new Logger('Extrator Manga', this.dataProcessingId, this.processingId)
+    logger.info('Extração iniciada')
+
+    /* Downloading the images from the manga. */
+    await downloadSoftUrl(await this.parsePages(url, parseButton), pasta, manga, extensionFile)
     await sleep(5000)
-    logger.info('download finalizado')
-    logger.info('conversão em pdf iniciada')
+
+    /* Converting the images downloaded to pdf. */
+    logger.info('Conversão em pdf iniciada')
     await convertImageFolderPdf(pasta, pastaSainda)
-    logger.info('Extracting cap: ' + this.capitulo + ' end!')
+    logger.info(`Extraçãp do capitulo: ${this.capitulo} FINALIZOU!!!`)
 
     this.capitulo++
 
     /* A recursive function that will be called until the end of the manga. */
     if (this.capitulo < this.capitulos + 1) {
       await sleep(5000)
-      logger.info('Nova extração iniciada')
+      logger.info(`Nova extração Inicida: Capitulo ${this.capitulo}`)
       await this.extract(urlPage[urlPage.length - 1], manga, parse, parseButton, caps)
     }
   }
@@ -138,3 +153,4 @@ export class ExtractManga {
     return url
   }
 }
+Array<number>
