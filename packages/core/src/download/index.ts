@@ -19,6 +19,7 @@ const logger = new Loggers('downloader')
  */
 export const downloadSoft = async (link: Array<string>, folder: string, nameFile: string, extensionFile: string) => {
   try {
+    let name
     // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     // verifica se a pasta aterior a pasta final existe
     // se não existe cria
