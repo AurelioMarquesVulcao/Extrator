@@ -7,6 +7,7 @@ const queues = Object.values(jobs).map(job => ({
   bull: new Queue(job.key, 'redis://127.0.0.1:6379'),
   name: job.key,
   handle: job.handle,
+  options: job.options,
 }))
 
 export default {
@@ -14,7 +15,7 @@ export default {
   add(name, data) {
     const queue = this.queues.find(queue => queue.name === name)
 
-    return queue.bull.add(data)
+    return queue.bull.add(data, queue.options)
   },
   process() {
     return this.queues.forEach(queue => {

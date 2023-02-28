@@ -40,7 +40,7 @@ export const testCore = (name: string) => {
   await Queue.add('Teste_de_fila', { user })
 
 
-  // fila
+  fila
 
   // para filas individuais
   // await Queue.add({ user })
