@@ -24,6 +24,9 @@ export const rsaPublicKey4096 = publicKey
 export const Logger = Loggers
 export { conectMongo, disconnectMongo, extractionSave, processingSave } from './databases/mongoDB'
 export { Processing, Extracting } from './@types'
+export const Queues = Queue
+
+
 
 export const testCore = (name: string) => {
   console.log('olá mundo, me chamo: ' + name)
@@ -36,8 +39,8 @@ export const testCore = (name: string) => {
 
   await Queue.add('Teste_de_fila', { user })
 
-  fila
-  
+  // fila
+
   // para filas individuais
   // await Queue.add({ user })
   // fila

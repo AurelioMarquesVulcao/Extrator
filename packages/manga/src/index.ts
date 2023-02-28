@@ -67,13 +67,13 @@ class App {
     }
 
     // For Worker
-    else {
-      // Workers can share any TCP connection
-      // In this case it is an HTTP server
-      this.express.listen(port, err => {
-        err ? console.log('Error in server setup') : console.log(`Worker ${process.pid} started`)
-      })
-    }
+    // else {
+    //   // Workers can share any TCP connection
+    //   // In this case it is an HTTP server
+    //   this.express.listen(port, err => {
+    //     err ? console.log('Error in server setup') : console.log(`Worker ${process.pid} started`)
+    //   })
+    // }
   }
 }
 module.exports = new App()
