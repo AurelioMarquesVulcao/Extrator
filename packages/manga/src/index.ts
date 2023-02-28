@@ -7,11 +7,11 @@ import cluster from 'cluster'
 import { resolve } from 'path'
 import dotenv from 'dotenv'
 
+
 // const numCPUs = require('os').cpus().length;
 const numCPUs = 1
 console.log(numCPUs)
-console.log(process.pid);
-
+console.log(process.pid)
 
 // import {routes} from "routes"
 // const cors = require("cors");
@@ -29,7 +29,6 @@ class App {
     this.routes()
 
     this.multi()
-
 
 
     // this.express.listen(port, () =>

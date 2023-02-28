@@ -9,6 +9,7 @@
     "build": "lerna run build:1 && lerna run build:2",
     "start:core": "lerna run start:core",
     "start:manga": "lerna run start:manga",
+    "start:bull": "lerna run start:bull",
     "serve:manga": "lerna run serve:manga",
     "dockerbuild:manga": "cp packages/manga/Dockerfile ./ && docker build -t extrator_manga . && rm -rf Dockerfile",
     "run:manga": "docker run -t -p 3300:3300 -v /media/vulcao/1 tera/manga/downloads:/app/downloads -d --restart=unless-stopped --name extrator_manga extrator_manga",
@@ -21,7 +22,8 @@
     "commitizen": "^4.2.5",
     "cz-lerna-changelog": "^2.0.3",
     "husky": "^8.0.2",
-    "lerna": "^5.6.2"
+    "lerna": "^5.6.2",
+    "sucrase": "^3.29.0"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",

@@ -2,7 +2,6 @@
   "extends": "@extrator/ts",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
-    
+    "rootDir": "src"
   }
 }
