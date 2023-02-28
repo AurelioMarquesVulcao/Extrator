@@ -20,8 +20,26 @@ export default {
   process() {
     return this.queues.forEach(queue => {
       queue.bull.process(queue.handle)
+
+      queue.bull.on('completed', job => {
+        console.log(`Job with id ${job.id} has been completed`)
+      })
+
+      // queue.bull.on('global:completed', jobId => {
+      //   console.log(`All ---- Job with id ${jobId} has been completed`);
+      // })
+      // ...whereas global events only pass the job ID:
+      queue.bull.on('global:progress', (jobId, progress) => {
+        console.log(`Job ${jobId} is ${progress * 100}% ready!`)
+      })
+
+     
+
+
       queue.bull.on('failed', (job, err) => {
+
         console.log('Job failed:', job.id, err)
+
       })
     })
   },

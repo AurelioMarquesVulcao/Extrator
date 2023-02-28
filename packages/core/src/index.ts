@@ -37,9 +37,17 @@ export const testCore = (name: string) => {
   // console.log(redisConfig);
   const user = { nome: '212', email: '2323' }
 
+
   await Queue.add('Teste_de_fila', { user })
-
-
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
   fila
 
   // para filas individuais
