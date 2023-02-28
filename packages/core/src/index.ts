@@ -1,16 +1,18 @@
-import {
-  conectMongo,
-  disconnectMongo,
-  extractionSave,
-  processingSave,
-} from './databases/mongoDB'
+/** @format */
+
+// import { TesteModel } from './databases/models/teste'
+import { conectMongo, disconnectMongo, extractionSave, processingSave } from './databases/mongoDB'
 import { downloadSoft } from './download'
 import { Loggers } from './Logger'
+// import { redisConfig } from './message_broker/config/redis'
+import Teste_de_fila from './message_broker/jobs/Teste_de_fila'
 import { convertFolderToPDF } from './pdf'
 import { testPrivate, testPublic } from './RSA/keys'
 import { rsaDecryptSHA512 } from './RSA/RSA-decrypt'
 import { rsaEncryptSHA512 } from './RSA/RSA-encrypt'
 import { privateKey, publicKey } from './RSA/RSA-keys'
+import Queue from '../src/message_broker/lib/Queue'
+import { fila } from './message_broker'
 // const { Robo } = require('./robo');
 
 export const convertImageFolderPdf = convertFolderToPDF
@@ -20,12 +22,7 @@ export const rsaEncrypt = rsaEncryptSHA512
 export const rsaPrivateKey4096 = privateKey
 export const rsaPublicKey4096 = publicKey
 export const Logger = Loggers
-export {
-  conectMongo,
-  disconnectMongo,
-  extractionSave,
-  processingSave,
-} from './databases/mongoDB'
+export { conectMongo, disconnectMongo, extractionSave, processingSave } from './databases/mongoDB'
 export { Processing, Extracting } from './@types'
 
 export const testCore = (name: string) => {
@@ -33,6 +30,18 @@ export const testCore = (name: string) => {
 }
 // testCore("jon Doe!")
 ;(async () => {
+  // console.log(Teste_de_fila)
+  // console.log(redisConfig);
+  const user = { nome: '212', email: '2323' }
+
+  await Queue.add('Teste_de_fila', { user })
+
+  fila
+  
+  // para filas individuais
+  // await Queue.add({ user })
+  // fila
+
   // await conectMongo();
   // let teste = {
   //   name: "Jon Doe",
