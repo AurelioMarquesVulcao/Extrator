@@ -13,6 +13,7 @@ import { rsaEncryptSHA512 } from './RSA/RSA-encrypt'
 import { privateKey, publicKey } from './RSA/RSA-keys'
 import Queue from '../src/message_broker/lib/Queue'
 import { fila } from './message_broker'
+import { youtube } from './youtube'
 // const { Robo } = require('./robo');
 
 export const convertImageFolderPdf = convertFolderToPDF
@@ -26,19 +27,17 @@ export { conectMongo, disconnectMongo, extractionSave, processingSave } from './
 export { Processing, Extracting } from './@types'
 export const Queues = Queue
 
-
-
 export const testCore = (name: string) => {
   console.log('olá mundo, me chamo: ' + name)
 }
 // testCore("jon Doe!")
-;(async () => {
+(async () => {
   // console.log(Teste_de_fila)
   // console.log(redisConfig);
   const user = { nome: '212', email: '2323' }
+  await youtube('https://www.youtube.com/watch?v=-wXPxJYhZeI',"pré-aula0")
+  // console.log(Queue.queues.map(queue => queue.bull))
 
-
-  await Queue.add('Teste_de_fila', { user })
   // await Queue.add('Teste_de_fila', { user })
   // await Queue.add('Teste_de_fila', { user })
   // await Queue.add('Teste_de_fila', { user })
@@ -48,7 +47,38 @@ export const testCore = (name: string) => {
   // await Queue.add('Teste_de_fila', { user })
   // await Queue.add('Teste_de_fila', { user })
   // await Queue.add('Teste_de_fila', { user })
-  fila
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // await Queue.add('Teste_de_fila', { user })
+  // fila
 
   // para filas individuais
   // await Queue.add({ user })

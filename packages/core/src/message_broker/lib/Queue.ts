@@ -9,8 +9,10 @@ const queues = Object.values(jobs).map(job => ({
   handle: job.handle,
   options: job.options,
 }))
+// console.log(queues);
 
 export default {
+  
   queues,
   add(name, data) {
     const queue = this.queues.find(queue => queue.name === name)
@@ -29,17 +31,12 @@ export default {
       //   console.log(`All ---- Job with id ${jobId} has been completed`);
       // })
       // ...whereas global events only pass the job ID:
-      queue.bull.on('global:progress', (jobId, progress) => {
-        console.log(`Job ${jobId} is ${progress * 100}% ready!`)
-      })
-
-     
-
+      // queue.bull.on('global:progress', (jobId, progress) => {
+      //   console.log(`Job ${jobId} is ${progress * 100}% ready!`)
+      // })
 
       queue.bull.on('failed', (job, err) => {
-
         console.log('Job failed:', job.id, err)
-
       })
     })
   },

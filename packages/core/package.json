@@ -46,6 +46,7 @@
     "pdfkit": "^0.13.0",
     "require-dir": "^1.2.0",
     "winston": "^3.8.2",
-    "winston-mongodb": "^5.1.1"
+    "winston-mongodb": "^5.1.1",
+    "ytdl-core": "^4.11.2"
   }
 }

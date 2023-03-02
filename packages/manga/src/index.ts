@@ -6,6 +6,12 @@ import Routes from './routes'
 import cluster from 'cluster'
 import { resolve } from 'path'
 import dotenv from 'dotenv'
+// -----------------
+const monitoro = require('monitoro')
+import { Queues } from '@extrator/core'
+// ---------------
+// import { BullMonitorExpress } from '@bull-monitor/express';
+// import { BullAdapter } from '@bull-monitor/root/dist/bull-adapter';
 
 
 // const numCPUs = require('os').cpus().length;
@@ -31,9 +37,9 @@ class App {
     this.multi()
 
 
-    // this.express.listen(port, () =>
-    //   console.log(`Sua API REST está funcionando na porta ${port} `)
-    // );
+    this.express.listen(port, () =>
+      console.log(`Sua API REST está funcionando na porta ${port} `)
+    );
     // this.bot();
   }
 
@@ -45,6 +51,11 @@ class App {
   routes() {
     // this.express.use(routes);
     this.express.use('', Routes.router)
+    this.express.locals.MonitoroQueues = Queues.queues.map(queue => queue.bull)
+    this.express.use('/foo', monitoro)
+    this.express.use('/foo/bar', monitoro)
+    //  ------------------------
+
   }
 
   /*

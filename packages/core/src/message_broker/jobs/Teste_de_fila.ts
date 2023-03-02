@@ -3,26 +3,27 @@
 export default {
   key: 'Teste_de_fila',
   options: {
-    delay: 1100,
-    priority: 1,
+    delay: 10,
+    priority: 4,
     attempts: 5, // If job fails it will retry till 5 times
-    backoff: 50, // static 5 sec delay between retry
-    // limiter: {
-    //   max: 1,
-    //   duration: 60000
-    // },
+    backoff: 50000, // static 5 sec delay between retry
+    timeout: 10000,
+    limiter: {
+      max: 3,
+      duration: 1200000,
+    },
     // repeat: {
-    //   every: 10000,
-    //   limit: 5
+    //   every: 60000,
+    //   limit: 3
     // },
   },
   async handle({ data }) {
     const { user } = data
     // console.log(user)
-    console.log(user, 'try -> cat')
+    console.log(user, 'try -> cat -> prioridade 2')
     // console.log(user)
     // console.log(user)
-    errou()
+    // errou()
     // posso chamar uma funcao aqui
   },
 }
