@@ -9,6 +9,8 @@ import { disconnectMongo } from '@extrator/core'
 import { extractionSave } from '@extrator/core'
 import { resolve } from 'path'
 
+
+
 // Problema na variavél urlPage, esta com problemas devido a tipagem
 var urlPage = []
 

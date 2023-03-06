@@ -5,15 +5,16 @@ import { conectMongo, disconnectMongo, extractionSave, processingSave } from './
 import { downloadSoft } from './download'
 import { Loggers } from './Logger'
 // import { redisConfig } from './message_broker/config/redis'
-import Teste_de_fila from './message_broker/jobs/Teste_de_fila'
+// import Teste_de_fila from './message_broker/jobs/Teste_de_fila'
 import { convertFolderToPDF } from './pdf'
 import { testPrivate, testPublic } from './RSA/keys'
 import { rsaDecryptSHA512 } from './RSA/RSA-decrypt'
 import { rsaEncryptSHA512 } from './RSA/RSA-encrypt'
 import { privateKey, publicKey } from './RSA/RSA-keys'
-import Queue from '../src/message_broker/lib/Queue'
+import Queue from '../src/message_broker/bull/lib/Queue'
 import { fila } from './message_broker/bull'
-import { youtube } from './youtube'
+// import { consumer, publish } from './message_broker/rabbitMQ'
+// import { youtube } from './youtube'
 // const { Robo } = require('./robo');
 
 export const convertImageFolderPdf = convertFolderToPDF
@@ -25,62 +26,29 @@ export const rsaPublicKey4096 = publicKey
 export const Logger = Loggers
 export { conectMongo, disconnectMongo, extractionSave, processingSave } from './databases/mongoDB'
 export { Processing, Extracting } from './@types'
+export { publish, consumer } from './message_broker/rabbitMQ'
 export const Queues = Queue
 
 export const testCore = (name: string) => {
   console.log('olá mundo, me chamo: ' + name)
 }
 // testCore("jon Doe!")
-(async () => {
+;(async () => {
   // console.log(Teste_de_fila)
   // console.log(redisConfig);
   const user = { nome: '212', email: '2323' }
+  // await publish('teste', [
+  //   { nome: '212', email: '2323' },
+  //   { nome: '212', email: '2323' },
+  // ])
+  // const hello = mensage => {
+  //   console.log('hello world2')
+  //   console.log(mensage)
+  // }
+  // await consumer('teste', 3, hello)
+  // consumer('teste')
   // await youtube('https://www.youtube.com/watch?v=-wXPxJYhZeI',"pré-aula0")
   // console.log(Queue.queues.map(queue => queue.bull))
-
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  await Queue.add('Teste_de_fila', { user })
-  fila
 
   // para filas individuais
   // await Queue.add({ user })

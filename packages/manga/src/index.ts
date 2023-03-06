@@ -51,9 +51,9 @@ class App {
   routes() {
     // this.express.use(routes);
     this.express.use('', Routes.router)
-    this.express.locals.MonitoroQueues = Queues.queues.map(queue => queue.bull)
-    this.express.use('/foo', monitoro)
-    this.express.use('/foo/bar', monitoro)
+    // this.express.locals.MonitoroQueues = Queues.queues.map(queue => queue.bull)
+    // this.express.use('/foo', monitoro)
+    // this.express.use('/foo/bar', monitoro)
     //  ------------------------
 
   }

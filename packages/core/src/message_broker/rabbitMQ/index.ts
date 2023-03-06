@@ -1,31 +1,75 @@
+/** @format */
 
+import amqp from 'amqplib'
 
-const amqp = require('amqplib');
+import dotenv from 'dotenv'
+import sleep from 'await-sleep'
 
-const queue = 'hello';
-const text = 'Hello World!';
+dotenv.config()
+const rabbit = process.env.RABBITMQ_URL || 'amqp://user:password@127.0.0.1:5672'
+console.log(rabbit);
 
-(async () => {
-  let connection;
+export const publish = async (queue: string, messages: Array<object>) => {
+  let connection
   try {
-    connection = await amqp.connect('amqp://user:password@localhost:5672');
-    const channel = await connection.createChannel();
+    console.log(rabbit);
 
-    await channel.assertQueue(queue, { durable: false });
+    connection = await amqp.connect(rabbit)
+    const channel = await connection.createChannel()
 
-    // NB: `sentToQueue` and `publish` both return a boolean
-    // indicating whether it's OK to send again straight away, or
-    // (when `false`) that you should wait for the event `'drain'`
-    // to fire before writing again. We're just doing the one write,
-    // so we'll ignore it.
-    channel.sendToQueue(queue, Buffer.from(text));
-    console.log(" [x] Sent '%s'", text);
-    await channel.close();
+    await channel.assertQueue(queue, { durable: true })
+    messages.forEach(async message => {
+      console.log(JSON.stringify(message));
+
+      channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)))
+    })
+
+
+    await sleep(300)
+    await channel.close()
+  } catch (err) {
+    console.log(err);
+
+    console.warn(err)
+  } finally {
+    if (connection) await connection.close()
   }
-  catch (err) {
-    console.warn(err);
+}
+
+
+export const consumer = async (queue: string, listeners: number, ...args: Array<Function>) => {
+  try {
+    const connection = await amqp.connect(rabbit)
+    process.once('SIGINT', async () => {
+      await connection.close()
+    })
+
+    const channel = await connection.createChannel()
+    await channel.assertQueue(queue, { durable: true })
+
+    channel.prefetch(listeners)
+    await channel.consume(
+      queue,
+      async message => {
+        const text = message.content.toString()
+
+        await sleep(250)
+        setTimeout(() => {
+          args.forEach(async arg => {
+            arg(text)
+          })
+          console.log(' [x] Done')
+          // const error = new Error('Não foi possivél processar')
+          // throw error
+          channel.ack(message)
+        }, 1000)
+      },
+      { noAck: false }
+    )
+
+    console.log(' [*] Waiting for messages. To exit press CTRL+C')
+  } catch (err) {
+    console.log(err)
+    console.warn(err)
   }
-  finally {
-    if (connection) await connection.close();
-  };
-})();
+}
