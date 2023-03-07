@@ -7,3 +7,13 @@
 {"level":"error","message":"downloader -> Error: read ECONNRESET"}
 {"level":"error","message":"downloader -> Erro ao baixar os arquivos"}
 {"level":"error","message":"downloader -> Url falhou...27"}
+{"level":"error","message":"downloader -> AxiosError: Invalid URL"}
+{"level":"error","message":"downloader -> Erro ao baixar os arquivos"}
+{"level":"error","message":"downloader -> AxiosError: Invalid URL"}
+{"level":"error","message":"downloader -> Erro ao baixar os arquivos"}
+{"level":"error","message":"downloader -> Error: connect ECONNREFUSED 127.0.0.1:80"}
+{"level":"error","message":"downloader -> Erro ao baixar os arquivos"}
+{"level":"error","message":"downloader -> Error: connect ECONNREFUSED 127.0.0.1:80"}
+{"level":"error","message":"downloader -> Erro ao baixar os arquivos"}
+{"level":"error","message":"downloader -> Error: connect ECONNREFUSED 127.0.0.1:80"}
+{"level":"error","message":"downloader -> Erro ao baixar os arquivos"}

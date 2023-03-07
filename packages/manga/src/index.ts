@@ -7,17 +7,18 @@ import cluster from 'cluster'
 import { resolve } from 'path'
 import dotenv from 'dotenv'
 // -----------------
-const monitoro = require('monitoro')
-import { Queues } from '@extrator/core'
+// const monitoro = require('monitoro')
+
+dotenv.config()
+// import { Queues } from '@extrator/core'
 // ---------------
 // import { BullMonitorExpress } from '@bull-monitor/express';
 // import { BullAdapter } from '@bull-monitor/root/dist/bull-adapter';
 
-
 // const numCPUs = require('os').cpus().length;
 const numCPUs = 1
 console.log(numCPUs)
-console.log(process.pid)
+// console.log(process.pid)
 
 // import {routes} from "routes"
 // const cors = require("cors");
@@ -34,12 +35,9 @@ class App {
     this.middlewares()
     this.routes()
 
-    this.multi()
+    // this.multi()
 
-
-    this.express.listen(port, () =>
-      console.log(`Sua API REST está funcionando na porta ${port} `)
-    );
+    this.express.listen(port, () => console.log(`Sua API REST está funcionando na porta ${port} `))
     // this.bot();
   }
 
@@ -55,7 +53,6 @@ class App {
     // this.express.use('/foo', monitoro)
     // this.express.use('/foo/bar', monitoro)
     //  ------------------------
-
   }
 
   /*
@@ -65,7 +62,6 @@ class App {
     // For Master process
     if (cluster.isMaster) {
       console.log(`Master ${process.pid} is running`)
-
       // Fork workers.
       for (let i = 0; i < numCPUs; i++) {
         cluster.fork()
@@ -74,16 +70,13 @@ class App {
       cluster.on('exit', (worker, code, signal) => {
         console.log(`worker ${worker.process.pid} died`)
       })
+    } else {
+      // Workers can share any TCP connection
+      // In this case it is an HTTP server
+      this.express.listen( err => {
+        err ? console.log('Error in server setup') : console.log(`Worker ${process.pid} started`)
+      })
     }
-
-    // For Worker
-    // else {
-    //   // Workers can share any TCP connection
-    //   // In this case it is an HTTP server
-    //   this.express.listen(port, err => {
-    //     err ? console.log('Error in server setup') : console.log(`Worker ${process.pid} started`)
-    //   })
-    // }
   }
 }
 module.exports = new App()

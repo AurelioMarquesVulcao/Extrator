@@ -9,7 +9,18 @@ import { disconnectMongo } from '@extrator/core'
 import { extractionSave } from '@extrator/core'
 import { resolve } from 'path'
 
+import { readFile } from 'fs'
 
+var html
+readFile(
+  '/home/aurelio/meta/Extrator/downloads/Teihen Ryoushu no Kanchigai Eiyuutan - Capítulo 01 - Leitor de Mangás Online em Português _ Manga Yabu.html',
+  'utf8',
+  (err, data) => {
+    if (err) throw err
+    // console.log(data)
+    html = data
+  }
+)
 
 // Problema na variavél urlPage, esta com problemas devido a tipagem
 var urlPage = []
@@ -103,6 +114,8 @@ export class ExtractManga {
     if (this.capitulo < this.capitulos + 1) {
       await sleep(5000)
       logger.info(`Nova extração Inicida: Capitulo ${this.capitulo}`)
+      console.log(urlPage)
+
       await this.extract(urlPage[urlPage.length - 1], manga, parse, parseButton, caps)
     }
   }
@@ -115,6 +128,7 @@ export class ExtractManga {
   async extractPage(url: string) {
     const site = await axios.get(url)
     const dataSite = site.data
+    // const dataSite =html
     return dataSite
   }
 
@@ -133,6 +147,8 @@ export class ExtractManga {
       let datas = $(this).attr('href')
       urlPage.push(datas)
     })
+    // console.log(urlPage)
+
     return await this.parseImage(firstPage)
   }
 
@@ -152,7 +168,8 @@ export class ExtractManga {
     })
     // REMOVE URL DESNECESSARIAS
     url.shift()
+    console.log(url)
+
     return url
   }
 }
-Array<number>
