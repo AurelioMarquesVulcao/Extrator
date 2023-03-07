@@ -74,3 +74,72 @@ export const downloadSoft = async (link: Array<string>, folder: string, nameFile
     logger.error('Erro ao baixar os arquivos')
   }
 }
+
+type DownloadSoftMessage = {
+  link: Array<string>
+  folder: string
+  nameFile: string
+  extensionFile: string
+}
+
+/**
+ * It downloads files from a list of links, and saves them in a folder
+ * @param {DownloadSoftMessage}  - link: Array of links to download
+ */
+export const downloadSoftMessage = async ({ link, folder, nameFile, extensionFile }) => {
+  try {
+    let name
+    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    // verifica se a pasta aterior a pasta final existe
+    // se não existe cria
+
+    /* Creating a folder if it doesn't exist. */
+    const regex = /(\S*)\//gm
+    if (!Fs.existsSync(folder.match(regex)[0])) {
+      Fs.mkdirSync(folder.match(regex)[0])
+    }
+    // verifica se a pasta final do download existe
+    // se não existe cria
+    if (!Fs.existsSync(folder)) {
+      Fs.mkdirSync(folder)
+    }
+
+    /* Downloading the files. */
+    for (let i = 0; i < link.length; i++) {
+      // await 2 seconds for each download
+      await sleep(2000)
+      // Ajust name file
+      if (i < 10) {
+        name = nameFile + '0' + i + extensionFile
+      } else {
+        name = nameFile + i + extensionFile
+      }
+      const url = link[i]
+      const path = Path.resolve(__dirname, folder, name)
+      // Download File
+      const response = await axios({
+        method: 'GET',
+        url: url,
+        responseType: 'stream',
+        // httpsAgent: proxy,
+      })
+
+      response.data.pipe(Fs.createWriteStream(path))
+      new Promise((resolve, reject) => {
+        response.data.on('end', () => {
+          resolve(null)
+          logger.info('Url foi baixada com sucesso.' + i)
+        })
+        response.data.on('error', err => {
+          reject(err)
+          logger.error('Url falhou...' + i)
+          const error = new Error('Não foi possivél baixar o documento')
+          throw error
+        })
+      })
+    }
+  } catch (e) {
+    logger.error(e)
+    logger.error('Erro ao baixar os arquivos')
+  }
+}

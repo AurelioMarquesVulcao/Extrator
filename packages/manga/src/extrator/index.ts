@@ -1,6 +1,6 @@
 /** @format */
 
-import { conectMongo, convertImageFolderPdf, downloadSoftUrl, Logger, processingSave } from '@extrator/core'
+import { conectMongo, convertImageFolderPdf, downloadSoftUrl, Logger, processingSave, publish } from '@extrator/core'
 import axios from 'axios'
 import cheerioModule from 'cheerio'
 import sleep from 'await-sleep'
@@ -98,14 +98,18 @@ export class ExtractManga {
 
     const logger = new Logger('Extrator Manga', this.dataProcessingId, this.processingId)
     logger.info('Extração iniciada')
-
-    /* Downloading the images from the manga. */
-    await downloadSoftUrl(await this.parsePages(url, parseButton), pasta, manga, extensionFile)
+    await (
+      await this.parsePages(url, parseButton)
+    ).forEach(async page => {
+      const objeto = { link: page, folder: pasta, nameFile: manga, extensionFile: extensionFile }
+      await publish('download_images', objeto)
+    })
+    // await downloadSoftUrl(await this.parsePages(url, parseButton), pasta, manga, extensionFile)
     await sleep(5000)
 
     /* Converting the images downloaded to pdf. */
     logger.info('Conversão em pdf iniciada')
-    await convertImageFolderPdf(pasta, pastaSainda)
+    // await convertImageFolderPdf(pasta, pastaSainda)
     logger.info(`Extraçãp do capitulo: ${this.capitulo} FINALIZOU!!!`)
 
     this.capitulo++

@@ -27,6 +27,7 @@ export const Logger = Loggers
 export { conectMongo, disconnectMongo, extractionSave, processingSave } from './databases/mongoDB'
 export { Processing, Extracting } from './@types'
 export { publish, consumer } from './message_broker/rabbitMQ'
+export { downloadSoftMessage } from './download'
 export const Queues = Queue
 
 export const testCore = (name: string) => {
