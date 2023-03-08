@@ -19,7 +19,6 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   include:
-  - project: sistemas/ci-cd-templates/versionize
+  - project: AurelioMarquesVulcao/versionize
     ref: v2.0.5
     file: versionize.yml
-
