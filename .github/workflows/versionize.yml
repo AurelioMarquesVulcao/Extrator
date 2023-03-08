@@ -1,0 +1,254 @@
+variables:
+    PROJECT_PATH: version
+    GIT_USER_NAME: "Auto Version"
+    GIT_USER_EMAIL: "meta.grupo.tiradentes@gmail.com"
+
+stages:
+  - versionize 
+
+versionize_prod:
+  image: mcr.microsoft.com/dotnet/sdk:6.0
+  stage: versionize
+  variables:
+    GIT_DEPTH: "20"
+  only:
+    - main
+    - master
+  before_script:
+    - git config --global user.name "$GIT_USER_NAME"
+    - git config --global user.email "$GIT_USER_EMAIL"
+  script:
+    - "git clone https://VersionToken:$VERSION_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git project"
+    - cd project
+    - "git checkout $CI_COMMIT_BRANCH"
+    - ls
+    - | 
+     dotnet tool install --global Versionize || true
+     export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet/tools'
+     beforemainversion=$(sed -n -e 's/.*<Version>\(.*\)<\/Version>.*/\1/p' version/version)
+  
+     echo "############################################"
+     echo "##### RODANDO VERSIONAMENTO EM PRODUCAO ####"
+     echo "############################################"
+     echo "############################################"
+     echo "##### BERFORE       PROCESS             ####"
+     echo "##### MainVersion:   $beforemainversion ####"
+     echo "##### MainVersionFile:                  ####"
+     cat version/version
+     echo "############################################"
+     
+     mv version/version version/version.csproj
+     if [ -f "CHANGELOG-prod.md" ]; then
+        mv CHANGELOG-prod.md CHANGELOG.md
+        versionize --skip-commit --skip-dirty
+     else
+        versionize --skip-commit --skip-dirty --changelog-all
+     fi
+     mainversion=$(sed -n -e 's/.*<Version>\(.*\)<\/Version>.*/\1/p' version/version.csproj)
+     mv CHANGELOG.md CHANGELOG-prod.md
+     mv version/version.csproj version/version
+     
+     echo "############################################"
+     echo "##### BERFORE       PROCESS             ####"
+     echo "##### MainVersion:   $mainversion ####"
+     echo "##### MainVersionFile:                  ####"
+     cat version/version
+     echo "############################################"
+     
+     git add .
+     git commit -m "chore(release): $mainversion [ci skip]"
+     git tag -a v$mainversion -m "chore(release): $mainversion [ci skip]"
+     git push -o ci-skip --follow-tags https://VersionToken:$VERSION_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:$CI_COMMIT_BRANCH
+        
+  after_script:
+    - cd project
+    - "dotnet tool install --global Versionize || true"
+    - export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet/tools'
+    - git checkout $CI_COMMIT_BRANCH
+    - git fetch --all --tags
+    - git reset --hard HEAD
+    - git pull
+    - cp version/version ../version/version
+    - cat ../version/version
+    - | 
+        echo Efetuando merge da '$CI_COMMIT_BRANCH' nas branchs..    
+        mainversion=$(sed -n -e 's/.*<Version>\(.*\)<\/Version>.*/\1/p' version/version)
+        echo MainVersion $mainversion
+        git for-each-ref 'refs/remotes/origin/*' | \
+          while read rev type ref; do
+          branch=$(expr "$ref" : 'refs/remotes/origin/\(.*\)' )
+          revs=$(git rev-list $rev..$CI_COMMIT_BRANCH)
+          if [ -n "$revs" ]; then
+              if [ $branch != "$CI_COMMIT_BRANCH" ] && [ $branch != "HEAD" ]; then
+                if [ $branch == "homolog" ] || [ $branch == "develop" ]; then
+                    echo "##################################################################"
+                    echo "##### MERJANDO AUTOMATICAMENTE $CI_COMMIT_BRANCH INTO $branch ####"
+                    echo "##################################################################"
+                    
+                    git checkout $branch 
+                    git pull --ff-only
+                    
+                    ## Se nao existe versao copia a de prod recem gerada
+                    if [[ ! -f "version/version" ]]; then
+                        mkdir -p version
+                        cp ../version/version version/version
+                        mainversion=$(sed -n -e 's/.*<Version>\(.*\)<\/Version>.*/\1/p' version/version)
+                        echo Nova instalacao identificada na branch '$branch' versao '$mainversion'
+                        git add .
+                        git commit -m "chore(Versionize): instalando o versionize, via main"
+                    fi
+                    
+                    ##busca a ultima versao de release caso exista se nao 0
+                    if [[ -f "version/$branch/version" ]]; then
+                        release=$(sed -n -e 's/.*<Version>''.*.*-'$branch'.\(.*\)<\/Version>.*/\1/p' version/$branch/version) || "0"
+                    fi   
+                    
+                    if [ -z $release ]; then
+                        release="0"
+                    fi
+                   
+                    echo "############################################"
+                    echo "##### BERFORE MERGE PROCESS             ####"
+                    echo "##### Release: release-$branch.$release ####"
+                    echo "##### MainVersion:   $mainversion       ####"
+                    echo "##### MainVersionFile:                  ####"
+                    cat version/version
+                    if [[ -f "version/$branch/version" ]]; then
+                        echo "##### BranchVersionFile:            ####"
+                        cat version/$branch/version || true
+                    fi
+                    echo "############################################"
+                    
+                    # Trata o changelog
+                    if [ -f "CHANGELOG-$branch.md" ]; then
+                        cp CHANGELOG-prod.md CHANGELOG-prod-backup.md
+                        cp CHANGELOG-$branch.md CHANGELOG-prod.md
+                        git add . 
+                        git commit -m "chore(Changelog): Updated changelog"
+                    fi
+                    
+                    git merge -X theirs $CI_COMMIT_BRANCH         
+                   
+                    cp CHANGELOG-prod.md CHANGELOG-$branch.md
+                    
+                    if [ -f "CHANGELOG-prod-backup.md" ]; then
+                        mv CHANGELOG-prod-backup.md CHANGELOG-prod.md
+                    fi
+                        
+                    fullversion="$mainversion-release-$branch.$release"
+                    echo "Colocando versao no version/$branch/version -> $fullversion"
+                    
+                    if [ ! -f "version/$branch/version" ]; then
+                        mkdir -p version/$branch
+                        cp version/version version/$branch/version
+                    fi
+                    
+                    sed -i -e 's/.*<Version>\(.*\)<\/Version>/<Version>'$fullversion'<\/Version>/g' version/$branch/version 
+                    
+                    echo "############################################"
+                    echo "##### AFTER MERGE PROCESS               ####"
+                    echo "##### Release: $mainversion-release-$branch.$release ####"
+                    echo "##### MainVersion:   $mainversion       ####"
+                    echo "##### MainVersionFile:                  ####"
+                    cat version/version || true
+                    echo "##### BranchVersionFile:                ####"
+                    cat version/$branch/version || true
+                    #echo "##### ChangelogFile:                    ####"
+                    #cat CHANGELOG-$branch.md || true
+                    #echo "##### MainchangelogFile:                ####"
+                    #cat CHANGELOG-$CI_COMMIT_BRANCH.md || true
+                    #echo "############################################"
+                    
+                    git add .
+                    git commit -m "chore(Versionize): Merge $CI_COMMIT_BRANCH $mainversion on $branch"
+                    git push -o ci-skip --follow-tags https://VersionToken:$VERSION_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git $branch:$branch
+
+                fi
+              fi
+          fi
+        done
+    
+
+    
+versionize_dev_hml:
+  image: mcr.microsoft.com/dotnet/sdk:6.0
+  stage: versionize
+  variables:
+    GIT_DEPTH: "20"
+  only:
+    - hml
+    - homolog
+    - homologation
+    - dev
+    - develop
+    - development
+  before_script:
+    - git config --global user.name "$GIT_USER_NAME"
+    - git config --global user.email "$GIT_USER_EMAIL"
+  script:
+    - "git clone https://VersionToken:$VERSION_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git project"
+    - cd project
+    - cp version/version ../version/version
+    - "dotnet tool install --global Versionize || true"
+    - export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet/tools'
+    - "git checkout $CI_COMMIT_BRANCH"
+    - ls
+    - git pull --ff-only
+    - | 
+      echo "##################################################################"
+      echo "##### MERJANDO AUTOMATICAMENTE $CI_COMMIT_BRANCH INTO $branch ####"
+      echo "##################################################################"
+      echo "############################################"
+      echo "##### BERFORE VERSIONIZE                ####"
+      echo "##### MainVersionFile:                  ####"
+      cat version/version
+      if [ ! -f "version/$CI_COMMIT_BRANCH/version" ]; then
+      echo "##### BranchVersionFile:                ####"
+      cat version/$CI_COMMIT_BRANCH/version || true
+      fi
+      echo "############################################"
+             
+      mkdir -p version/$CI_COMMIT_BRANCH/
+      
+      if [ ! -f "version/$CI_COMMIT_BRANCH/version" ]; then
+         cp version/version version/$CI_COMMIT_BRANCH/version
+         sed -i 's/<\/Version>/-release-'$CI_COMMIT_BRANCH'.0<\/Version>/' version/$CI_COMMIT_BRANCH/version
+      fi 
+      
+      release=$(sed -n -e 's/.*<Version>''.*.*-'$CI_COMMIT_BRANCH'.\(.*\)<\/Version>.*/\1/p' version/$CI_COMMIT_BRANCH/version) 
+      if [ -z $release ]; then
+         release="0"
+      fi
+      
+      mv version/$CI_COMMIT_BRANCH/version version/$CI_COMMIT_BRANCH/version.csproj
+      
+      if [ -f "CHANGELOG-$CI_COMMIT_BRANCH.md" ]; then
+        mv CHANGELOG-$CI_COMMIT_BRANCH.md CHANGELOG.md
+      fi
+      
+      versionize --skip-commit --skip-dirty --pre-release release-$CI_COMMIT_BRANCH -a 
+      
+      mv CHANGELOG.md CHANGELOG-$CI_COMMIT_BRANCH.md    
+      mv version/$CI_COMMIT_BRANCH/version.csproj version/$CI_COMMIT_BRANCH/version
+      
+      mainversion=$(sed -n -e 's/.*<Version>\(.*\)<\/Version>.*/\1/p' version/version)
+      fullversionizeversion=$(sed -n -e 's/.*<Version>\(.*\)<\/Version>.*/\1/p' version/$CI_COMMIT_BRANCH/version)
+
+      echo "######################################################"
+      echo "##### AFTER VERSIONIZE                            ####"
+      echo "##### Release: release-$CI_COMMIT_BRANCH.$release ####"
+      echo "##### MainVersionFile:                            ####"
+      echo "##### FullVersionize : $fullversionizeversion     ####"
+      cat version/version
+      echo "##### BranchVersionFile:                          ####"
+      cat version/$CI_COMMIT_BRANCH/version || true
+      echo "######################################################"
+      
+      git add .
+      #git commit -m "chore(release): $mainversion.release-$CI_COMMIT_BRANCH.$release [ci skip]"
+      git commit -m "chore(release): $fullversionizeversion [ci skip]"
+      #git tag -a $mainversion.release-$CI_COMMIT_BRANCH.$release -m "chore(release): $mainversion.release-$CI_COMMIT_BRANCH.$release [ci skip]"
+      git tag -a $fullversionizeversion -m "chore(release): $fullversionizeversion [ci skip]"
+      git push -o ci-skip --follow-tags https://VersionToken:$VERSION_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:$CI_COMMIT_BRANCH
+  
+ 
