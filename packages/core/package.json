@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@extrator/core",
-  "version": "0.1.0",
+  "version": "0.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "directories": {
@@ -14,7 +14,7 @@
     "start:core": "nodemon dist/index.js"
   },
   "devDependencies": {
-    "@extrator/ts": "^0.0.4",
+    "@extrator/ts": "^0.0.5",
     "@types/amqplib": "^0.10.1",
     "@types/axios": "^0.14.0",
     "@types/node": "^18.11.9",

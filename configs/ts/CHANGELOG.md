@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.0.5 (2023-03-08)
+
+**Note:** Version bump only for package @extrator/ts
+
+
+
+
+
 ## [0.0.4](https://gitlab.grupotiradentes.com/sistemas/automacao/compare/v0.0.3...v0.0.4) (2022-12-02)
 
 **Note:** Version bump only for package @automacao/ts
