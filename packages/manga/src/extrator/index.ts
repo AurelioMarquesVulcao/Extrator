@@ -101,7 +101,7 @@ export class ExtractManga {
     await (
       await this.parsePages(url, parseButton)
     ).forEach(async page => {
-      const objeto = { link: page, folder: pasta, nameFile: manga, extensionFile: extensionFile }
+      const objeto = [{ link: page, folder: pasta, nameFile: manga, extensionFile: extensionFile }]
       await publish('download_images', objeto)
     })
     // await downloadSoftUrl(await this.parsePages(url, parseButton), pasta, manga, extensionFile)
