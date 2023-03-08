@@ -13,6 +13,7 @@ import { rsaEncryptSHA512 } from './RSA/RSA-encrypt'
 import { privateKey, publicKey } from './RSA/RSA-keys'
 import Queue from '../src/message_broker/bull/lib/Queue'
 import { fila } from './message_broker/bull'
+import { getPage } from './puppeteer'
 
 // old export
 export const convertImageFolderPdf = convertFolderToPDF
@@ -22,14 +23,16 @@ export const rsaEncrypt = rsaEncryptSHA512
 export const rsaPrivateKey4096 = privateKey
 export const rsaPublicKey4096 = publicKey
 export const Logger = Loggers
+export const Queues = Queue
 
 // New export
 export { conectMongo, disconnectMongo, extractionSave, processingSave } from './databases/mongoDB'
 export { Processing, Extracting } from './@types'
 export { publish, consumer } from './message_broker/rabbitMQ'
 export { downloadSoftMessage } from './download'
-export const Queues = Queue
+export { getPage } from './puppeteer'
 
+// test
 export const testCore = (name: string) => {
   console.log('olá mundo, me chamo: ' + name)
 }
@@ -37,4 +40,6 @@ export const testCore = (name: string) => {
 // testador de novas implementações.
 ;(async () => {
   const user = { nome: '212', email: '2323' }
+  await getPage('https://mangalivre.net/ler/super-god-pet-shop/online/433597/1#/!page0')
+
 })()
