@@ -40,6 +40,6 @@ export const testCore = (name: string) => {
 // testador de novas implementações.
 ;(async () => {
   const user = { nome: '212', email: '2323' }
-  await getPage('https://mangalivre.net/ler/super-god-pet-shop/online/433597/1#/!page0')
+  await getPage('https://mangalivre.net/ler/super-god-pet-shop/online/433597/1#/!page0',[{"html":"page"}])
 
 })()

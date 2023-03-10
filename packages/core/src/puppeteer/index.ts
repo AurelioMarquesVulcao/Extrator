@@ -3,7 +3,10 @@
 import puppeteer from 'puppeteer'
 import sleep from 'await-sleep'
 
-export const getPage = async (url: string) => {
+export const getPage = async (url: string, ...args) => {
+  const multiplas = '#reader-wrapper > div.reader-navigation.clear-fix > div.orientation-container.orientation-toggle'
+  const proximo =
+    '#reader-wrapper > div.reader-navigation.clear-fix > div.chapter-selection-container > div.chapter-next'
   try {
     console.log('liguei')
 
@@ -23,9 +26,12 @@ export const getPage = async (url: string) => {
     await page.setViewport({ width: 1080, height: 10024 })
     await sleep(3000)
     // console.log(await page.content())
-    const data = await html(page)
+    // const data = await html(page)
+    // console.log(data)
 
-    console.log(data)
+    args.forEach(async arg => {
+      arg('text')
+    })
 
     await sleep(3000)
     await browser.close()
@@ -46,7 +52,5 @@ const html = async (page: any) => {
 }
 
 const clickButton = async (page: any, button: string) => {
-  await page.click(
-    '#reader-wrapper > div.reader-navigation.clear-fix > div.chapter-selection-container > div.chapter-next'
-  )
+  await page.click(button)
 }
