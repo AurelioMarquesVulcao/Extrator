@@ -13,7 +13,7 @@ import { rsaEncryptSHA512 } from './RSA/RSA-encrypt'
 import { privateKey, publicKey } from './RSA/RSA-keys'
 import Queue from '../src/message_broker/bull/lib/Queue'
 import { fila } from './message_broker/bull'
-import { clickButton, getPage, html, newUrl, test_1, test_2 } from './puppeteer'
+import { clickButton, getPage, html, newUrl, test_1, test_2, test_3 } from './puppeteer'
 
 // old export
 export const convertImageFolderPdf = convertFolderToPDF
@@ -45,11 +45,12 @@ export const testCore = (name: string) => {
     '#reader-wrapper > div.reader-navigation.clear-fix > div.chapter-selection-container > div.chapter-next'
 
   await getPage(
-    'https://mangalivre.net/ler/super-god-pet-shop/online/433597/1#/!page0',
-    test_1,
-    test_2,
-    html,
-    clickButton
+    // [test_1,"foi"],
+    // [test_2,"foi"],
+    // [test_3]
+    'https://firemangas.com/ler/solo-leveling/online/2764/capitulo-00',
+    [html]
+    // [clickButton, multiplas]
     // newUrl
   )
 })()
